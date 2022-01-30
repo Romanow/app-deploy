@@ -17,6 +17,32 @@ variable "database" {
   }
 }
 
+variable "backend" {
+  description = "Backend parameters"
+  type        = object({
+    size    = string
+    region  = string
+    port    = number
+    image   = object({
+      repository = string
+      name       = string
+      tag        = string
+    })
+    profile = string
+  })
+  default     = {
+    size    = "basic-xxs"
+    region  = "ams"
+    port    = 8080
+    profile = "do"
+    image   = {
+      repository = "romanowalex"
+      name       = "backend-todo-list"
+      tag        = "v1.0-do"
+    }
+  }
+}
+
 variable "database_name" {
   description = "Database name for program"
   type        = string
@@ -29,8 +55,14 @@ variable "database_user" {
   default     = "program"
 }
 
-variable "domain" {
-  description = "Domain for project"
+variable "project_name" {
+  description = "Project name"
   type        = string
-  default     = "todo-list.romanow-alex.ru"
+  default     = "todo-list"
+}
+
+variable "domain" {
+  description = "Base domain"
+  type        = string
+  default     = "romanow-alex.ru"
 }

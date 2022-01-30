@@ -22,33 +22,40 @@ resource "digitalocean_database_db" "database" {
 
 resource "digitalocean_database_user" "user" {
   cluster_id = digitalocean_database_cluster.postgres.id
-  name       = var.database_name
+  name       = var.database_user
 }
 
 resource "digitalocean_app" "application" {
   spec {
-    name   = "todo-list-app"
-    region = "ams3"
+    name   = "${var.project_name}-app"
+    region = var.backend.region
     domain {
-      name = var.domain
+      name = "${var.project_name}.${var.domain}"
+      zone = var.domain
+      type = "PRIMARY"
     }
 
     service {
       name               = "backend"
       instance_count     = 1
-      instance_size_slug = "basic-xxs"
-      http_port          = 8080
+      instance_size_slug = var.backend.size
+      http_port          = var.backend.port
 
       image {
         registry_type = "DOCKER_HUB"
-        registry      = "romanowalex"
-        repository    = "backend-todo-list"
-        tag           = "v1.0-do"
+        registry      = var.backend.image.repository
+        repository    = var.backend.image.name
+        tag           = var.backend.image.tag
+      }
+
+      env {
+        key   = "SPRING_PROFILES_ACTIVE"
+        value = var.backend.profile
       }
 
       env {
         key   = "DATABASE_URL"
-        value = digitalocean_database_cluster.postgres.uri
+        value = digitalocean_database_cluster.postgres.host
       }
 
       env {
@@ -70,6 +77,14 @@ resource "digitalocean_app" "application" {
         key   = "DATABASE_PASSWORD"
         value = digitalocean_database_user.user.password
         type  = "SECRET"
+      }
+
+      health_check {
+        http_path             = "/manage/health"
+        initial_delay_seconds = 20
+        period_seconds        = 5
+        success_threshold     = 1
+        failure_threshold     = 10
       }
 
       routes {

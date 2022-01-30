@@ -35,6 +35,25 @@ resource "digitalocean_app" "application" {
       type = "PRIMARY"
     }
 
+    static_site {
+      name = "frontend"
+
+      github {
+        repo           = "Romanow/frontend-todo-list"
+        branch         = "master"
+        deploy_on_push = false
+      }
+
+      env {
+        key = "REACT_APP_BACKEND_IP"
+        value = "/backend"
+      }
+
+      routes {
+        path = "/"
+      }
+    }
+
     service {
       name               = "backend"
       instance_count     = 1
@@ -80,7 +99,7 @@ resource "digitalocean_app" "application" {
       }
 
       health_check {
-        http_path             = "/manage/health"
+        http_path             = "/backend/manage/health"
         initial_delay_seconds = 20
         period_seconds        = 5
         success_threshold     = 1

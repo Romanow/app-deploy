@@ -52,13 +52,13 @@ resource "digitalocean_app" "application" {
 
     static_site {
       name           = "frontend"
-      build_command  = "yarn build"
+      build_command  = "npm run build"
       output_dir     = "build"
       index_document = "index.html"
 
       github {
         repo           = "Romanow/frontend-todo-list"
-        branch         = "master"
+        branch         = "authorization"
         deploy_on_push = false
       }
 
@@ -113,6 +113,18 @@ resource "digitalocean_app" "application" {
       env {
         key   = "DATABASE_PASSWORD"
         value = digitalocean_database_connection_pool.connection_pool.password
+        type  = "SECRET"
+      }
+
+      env {
+        key   = "GOOGLE_CLIENT_ID"
+        value = var.oauth2_credentials.client_id
+        type  = "SECRET"
+      }
+
+      env {
+        key   = "GOOGLE_CLIENT_SECRET"
+        value = var.oauth2_credentials.client_secret
         type  = "SECRET"
       }
 

@@ -10,7 +10,7 @@ variable "database" {
     region  = string
     version = number
   })
-  default     = {
+  default = {
     size    = "db-s-1vcpu-1gb"
     region  = "ams3"
     version = 13
@@ -20,17 +20,17 @@ variable "database" {
 variable "backend" {
   description = "Backend parameters"
   type        = object({
-    size    = string
-    region  = string
-    port    = number
-    image   = object({
+    size   = string
+    region = string
+    port   = number
+    image  = object({
       repository = string
       name       = string
       tag        = string
     })
     profile = string
   })
-  default     = {
+  default = {
     size    = "basic-xxs"
     region  = "ams"
     port    = 8080
@@ -38,7 +38,7 @@ variable "backend" {
     image   = {
       repository = "romanowalex"
       name       = "backend-todo-list"
-      tag        = "v1.0-do"
+      tag        = "v1.1-do"
     }
   }
 }
@@ -65,4 +65,12 @@ variable "domain" {
   description = "Base domain"
   type        = string
   default     = "romanow-alex.ru"
+}
+
+variable "oauth2_credentials" {
+  description = "OAuth2 clientId and clientSecret"
+  type        = object({
+    client_id     = string
+    client_secret = string
+  })
 }

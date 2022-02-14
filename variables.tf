@@ -38,7 +38,7 @@ variable "backend" {
     image   = {
       repository = "romanowalex"
       name       = "backend-todo-list"
-      tag        = "v1.1-do"
+      tag        = "v1.0-do"
     }
   }
 }

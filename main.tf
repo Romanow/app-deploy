@@ -130,10 +130,10 @@ resource "digitalocean_app" "application" {
 
       health_check {
         http_path             = "/manage/health"
-        initial_delay_seconds = 20
-        period_seconds        = 5
+        initial_delay_seconds = 60
+        period_seconds        = 10
         success_threshold     = 1
-        failure_threshold     = 10
+        failure_threshold     = 20
       }
 
       routes {

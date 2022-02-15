@@ -39,6 +39,11 @@ resource "digitalocean_database_connection_pool" "connection_pool" {
   ]
 }
 
+resource "time_sleep" "wait_30_seconds" {
+  create_duration = "30s"
+  depends_on      = [digitalocean_database_connection_pool.connection_pool]
+}
+
 resource "digitalocean_app" "application" {
   spec {
     name   = "${var.project_name}-app"
@@ -141,4 +146,5 @@ resource "digitalocean_app" "application" {
       }
     }
   }
+  depends_on = [time_sleep.wait_30_seconds]
 }

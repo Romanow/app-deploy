@@ -43,6 +43,18 @@ variable "backend" {
   }
 }
 
+variable "frontend" {
+  description = "Frontend parameters"
+  type    = object({
+    repository = string
+    branch     = string
+  })
+  default = {
+    repository = "Romanow/frontend-todo-list"
+    branch = "authorization"
+  }
+}
+
 variable "database_name" {
   description = "Database name for program"
   type        = string

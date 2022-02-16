@@ -44,6 +44,19 @@ resource "time_sleep" "wait_30_seconds" {
   depends_on      = [digitalocean_database_connection_pool.connection_pool]
 }
 
+# Environment Variables
+# Frontend
+# – REACT_APP_BACKEND_IP = /backend
+# Backend
+# – SPRING_PROFILES_ACTIVE
+# – DATABASE_URL
+# – DATABASE_PORT
+# – DATABASE_NAME
+# – DATABASE_USER
+# – DATABASE_PASSWORD
+# – GOOGLE_CLIENT_ID
+# – GOOGLE_CLIENT_SECRET
+
 resource "digitalocean_app" "application" {
   spec {
     name   = "${var.project_name}-app"
@@ -62,8 +75,8 @@ resource "digitalocean_app" "application" {
       index_document = "index.html"
 
       github {
-        repo           = "Romanow/frontend-todo-list"
-        branch         = "authorization"
+        repo           = var.frontend.repository
+        branch         = var.frontend.branch
         deploy_on_push = false
       }
 
